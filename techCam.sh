@@ -307,7 +307,7 @@ read subdomain
 subdomain="${subdomain:-${default_subdomain}}"
 fi
 
-server
+cf_server
 payload
 checkfound
 
