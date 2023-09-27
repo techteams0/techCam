@@ -88,7 +88,7 @@ done
 
 
 
-cf_server() {
+server() {
 
 if [[ -e cloudflared ]]; then
 echo "Cloudflared already installed."
